@@ -1,9 +1,38 @@
 import express from 'express';
-import { calculateBmi } from './bmiCalculator';
 const app = express();
+import { calculateBmi } from './bmiCalculator';
+import { calculateExercises } from './exercisesCalculator';
+
+app.use(express.json());
+
+app.post('/exercises', (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!req.body.target || !req.body.daily_exercises) {
+    res.json({
+      error: 'parameters missing',
+    });
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const {
+      daily_exercises,
+      target,
+    }: { daily_exercises: Array<number>; target: number } = req.body;
+
+    for (let i = 0; i < daily_exercises.length; i++) {
+      if (isNaN(target) || isNaN(daily_exercises[i])) {
+        res.json({
+          error: 'malformatted parameters',
+        });
+      }
+    }
+
+    const result = calculateExercises(daily_exercises, target);
+    res.send(result);
+  }
+});
 
 app.get('/hello', (_req, res) => {
-  res.status(200).send('Hello Full Stack!');
+  res.send('Hello Full Stack!').status(200);
 });
 
 app.get('/bmi', (req, res) => {
