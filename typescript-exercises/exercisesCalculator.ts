@@ -38,4 +38,25 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseArgumentsEcxercises = (args: Array<string>): Array<number> => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const all = args.slice(2, args.length).map((a) => Number(a));
+
+  for (let i = 0; i < all.length; i++) {
+    if (isNaN(all[i])) {
+      throw new Error('Provided values were not numbers!');
+    }
+  }
+  return all;
+};
+
+try {
+  const allArgs = parseArgumentsEcxercises(process.argv);
+  console.log(calculateExercises(allArgs.slice(1, allArgs.length), allArgs[0]));
+} catch (error: unknown) {
+  let errorMessage = 'Argument error';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}
