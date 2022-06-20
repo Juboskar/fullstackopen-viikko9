@@ -2,7 +2,7 @@
   "name": "patientor-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
