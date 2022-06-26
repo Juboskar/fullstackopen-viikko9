@@ -3,6 +3,7 @@ import { addPatient, useStateValue } from '../state';
 import { apiBaseUrl } from '../constants';
 import { Patient } from '../types';
 import axios from 'axios';
+import GenderIcon from '../components/GenderIcon';
 
 const PatientPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -31,7 +32,9 @@ const PatientPage = () => {
 
   return (
     <div>
-      <h2>{patient.name}</h2>
+      <h2>
+        {patient.name} <GenderIcon gender={patient.gender} />
+      </h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
     </div>
