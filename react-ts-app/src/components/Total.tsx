@@ -1,8 +1,6 @@
-const Total = ({
-  parts,
-}: {
-  parts: { name: string; exerciseCount: number }[];
-}) => {
+import { CoursePart } from '../types';
+
+const Total = ({ parts }: { parts: CoursePart[] }) => {
   return (
     <p>
       Number of exercises{' '}
