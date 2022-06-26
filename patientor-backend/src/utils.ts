@@ -59,6 +59,7 @@ const toNewPatientEntry = ({
     ssn: parseStringValue(ssn),
     gender: parseGender(gender),
     occupation: parseStringValue(occupation),
+    entries: [],
   };
 
   return newEntry;

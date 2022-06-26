@@ -8,6 +8,11 @@ router.get('/', (_req, res) => {
   res.send(patientService.getEntries());
 });
 
+router.get('/:id', (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  res.send(patientService.getOneById(req.params.id));
+});
+
 router.post('/', (req, res) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
