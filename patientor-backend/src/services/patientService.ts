@@ -32,6 +32,9 @@ const addPatient = (patient: PatientEntry): NonSensitivePatientEntry => {
 
 const getOneById = (id: string): PatientEntry => {
   const patient = patientData.filter((patient) => patient.id === id)[0];
+  if (!patient) {
+    throw new Error('patient not found');
+  }
   return patient;
 };
 

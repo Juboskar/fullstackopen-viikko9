@@ -9,8 +9,15 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  res.send(patientService.getOneById(req.params.id));
+  try {
+    res.send(patientService.getOneById(req.params.id));
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 });
 
 router.post('/', (req, res) => {
