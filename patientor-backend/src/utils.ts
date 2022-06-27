@@ -1,5 +1,5 @@
 import { v1 as uuid } from 'uuid';
-import { Gender, Patient } from './types';
+import { Fields, Gender, Patient } from './types';
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -34,14 +34,6 @@ const parseGender = (gender: unknown): Gender => {
     throw new Error('Incorrect or missing gender: ' + gender);
   }
   return gender;
-};
-
-type Fields = {
-  name: unknown;
-  dateOfBirth: unknown;
-  ssn: unknown;
-  gender: unknown;
-  occupation: unknown;
 };
 
 const toNewPatientEntry = ({
