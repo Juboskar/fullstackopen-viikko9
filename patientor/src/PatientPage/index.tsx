@@ -1,13 +1,14 @@
 import { useParams } from 'react-router-dom';
 import { addPatient, useStateValue } from '../state';
 import { apiBaseUrl } from '../constants';
-import { Entry, Patient } from '../types';
+import { Patient } from '../types';
 import axios from 'axios';
 import GenderIcon from '../components/GenderIcon';
 import React from 'react';
+import EntryList from './EntryList';
 
 const PatientPage = () => {
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   React.useEffect(() => {
@@ -41,20 +42,7 @@ const PatientPage = () => {
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
       <h3>entries</h3>
-      <div>
-        {patient.entries?.map((e: Entry) => (
-          <div key={e.id}>
-            {e.date} <em>{e.description}</em>
-            <ul>
-              {e.diagnosisCodes?.map((d) => (
-                <li key={d}>
-                  {d} {diagnoses[d]?.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      <EntryList entries={patient.entries} />
     </div>
   );
 };
