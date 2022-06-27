@@ -7,7 +7,7 @@ export interface DiagnoseEntry {
   latin?: string;
 }
 
-export interface PatientEntry {
+export interface Patient {
   id: string;
   name: string;
   dateOfBirth: string;
@@ -18,9 +18,9 @@ export interface PatientEntry {
 }
 
 export enum Gender {
-  male = 'male',
-  female = 'female',
-  other = 'other',
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
 }
 
-export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn' | 'entries'>;
+export type NonSensitivePatientEntry = Omit<Patient, 'ssn' | 'entries'>;

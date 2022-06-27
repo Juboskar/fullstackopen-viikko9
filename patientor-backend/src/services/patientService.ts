@@ -1,11 +1,6 @@
-import rawPatientData from '../../data/patients.json';
+import patientData from '../../data/entries';
 
-import { NonSensitivePatientEntry, PatientEntry } from '../types';
-
-const patientData = rawPatientData as PatientEntry[];
-for (let i = 0; i < patientData.length; i++) {
-  if (patientData[i].entries === undefined) patientData[i].entries = [];
-}
+import { NonSensitivePatientEntry, Patient } from '../types';
 
 const patients: Array<NonSensitivePatientEntry> = patientData;
 
@@ -19,7 +14,7 @@ const getEntries = (): NonSensitivePatientEntry[] => {
   }));
 };
 
-const addPatient = (patient: PatientEntry): NonSensitivePatientEntry => {
+const addPatient = (patient: Patient): NonSensitivePatientEntry => {
   patients.push(patient);
   return {
     id: patient.id,
@@ -30,7 +25,7 @@ const addPatient = (patient: PatientEntry): NonSensitivePatientEntry => {
   };
 };
 
-const getOneById = (id: string): PatientEntry => {
+const getOneById = (id: string): Patient => {
   const patient = patientData.filter((patient) => patient.id === id)[0];
   if (!patient) {
     throw new Error('patient not found');

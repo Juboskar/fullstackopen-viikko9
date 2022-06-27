@@ -1,5 +1,5 @@
 import { v1 as uuid } from 'uuid';
-import { Gender, PatientEntry } from './types';
+import { Gender, Patient } from './types';
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -50,9 +50,9 @@ const toNewPatientEntry = ({
   ssn,
   gender,
   occupation,
-}: Fields): PatientEntry => {
+}: Fields): Patient => {
   const id = uuid();
-  const newEntry: PatientEntry = {
+  const newEntry: Patient = {
     id: id,
     name: parseStringValue(name),
     dateOfBirth: parseDate(dateOfBirth),
