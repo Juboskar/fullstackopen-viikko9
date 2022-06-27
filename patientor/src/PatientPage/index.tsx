@@ -6,7 +6,7 @@ import axios from 'axios';
 import GenderIcon from '../components/GenderIcon';
 
 const PatientPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   if (!id) return <div></div>;
 
@@ -44,7 +44,9 @@ const PatientPage = () => {
             {e.date} <em>{e.description}</em>
             <ul>
               {e.diagnosisCodes?.map((d) => (
-                <li key={d}>{d}</li>
+                <li key={d}>
+                  {d} {diagnoses[d].name}
+                </li>
               ))}
             </ul>
           </div>
