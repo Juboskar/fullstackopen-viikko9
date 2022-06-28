@@ -75,3 +75,26 @@ export type Fields = {
   gender: unknown;
   occupation: unknown;
 };
+
+export interface DischargeFields {
+  date: unknown;
+  criteria: unknown;
+}
+
+export interface SickLeaveFields {
+  startDate: unknown;
+  endDate: unknown;
+}
+
+export type EntryFields = {
+  id: unknown;
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown;
+  type: unknown;
+  discharge?: unknown;
+  employerName?: unknown;
+  sickLeave?: unknown;
+  healthCheckRating?: unknown;
+};

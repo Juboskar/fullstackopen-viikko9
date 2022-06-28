@@ -1,6 +1,6 @@
 import patientData from '../../data/entries';
 
-import { NonSensitivePatientEntry, Patient } from '../types';
+import { Entry, NonSensitivePatientEntry, Patient } from '../types';
 
 const patients: Array<NonSensitivePatientEntry> = patientData;
 
@@ -25,6 +25,15 @@ const addPatient = (patient: Patient): NonSensitivePatientEntry => {
   };
 };
 
+const addEntryToPatient = (entry: Entry, id: string): Entry => {
+  const patient = patientData.filter((p) => p.id === id)[0];
+  if (!patient) {
+    throw new Error('incorrect id');
+  }
+  patient.entries.push(entry);
+  return entry;
+};
+
 const getOneById = (id: string): Patient => {
   const patient = patientData.filter((patient) => patient.id === id)[0];
   if (!patient) {
@@ -33,8 +42,4 @@ const getOneById = (id: string): Patient => {
   return patient;
 };
 
-export default {
-  getEntries,
-  addPatient,
-  getOneById,
-};
+export default { addEntryToPatient, getEntries, addPatient, getOneById };
