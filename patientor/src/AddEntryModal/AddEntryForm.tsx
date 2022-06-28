@@ -5,11 +5,22 @@ import {
   HealthCheckOption,
   SelectField,
   TextField,
+  TypeField,
+  TypeOption,
 } from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
-import { HealthCheckEntry } from '../types';
+import { Discharge, HealthCheckRating } from '../types';
+import { useState } from 'react';
 
-export type AddEntryFormValues = Omit<HealthCheckEntry, 'id'>;
+export type AddEntryFormValues = {
+  type: 'HealthCheck' | 'Hospital' | 'OccupationalHealthcare';
+  description: string;
+  date: string;
+  specialist: string;
+  healthCheckRating: HealthCheckRating;
+  discharge: Discharge;
+  employerName: '';
+};
 
 interface Props {
   onSubmit: (values: AddEntryFormValues) => void;
@@ -23,8 +34,22 @@ const healthCheckOptions: HealthCheckOption[] = [
   { value: 3, label: 'CriticalRisk' },
 ];
 
+const typeOptions: TypeOption[] = [
+  { value: 'HealthCheck', label: 'Health Check' },
+  { value: 'OccupationalHealthcare', label: 'Occupational Healthcare' },
+  { value: 'Hospital', label: 'Hospital' },
+];
+
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
+  const [typeState, setType] = useState<TypeOption>({
+    value: 'HealthCheck',
+    label: 'Health Check',
+  });
+
+  const handleOnClick = (t: TypeOption) => {
+    setType(t);
+  };
 
   return (
     <Formik
@@ -34,6 +59,8 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: '',
         specialist: '',
         healthCheckRating: 0,
+        discharge: { criteria: '', date: '' },
+        employerName: '',
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -54,6 +81,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
+            <TypeField
+              label="Type"
+              name="type"
+              options={typeOptions}
+              action={handleOnClick}
+            />
+
             <Field
               label="Description"
               placeholder="Description"
@@ -77,11 +111,35 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               setFieldTouched={setFieldTouched}
               diagnoses={Object.values(diagnoses)}
             />
-            <SelectField
-              label="Health rating"
-              name="healthCheckRating"
-              options={healthCheckOptions}
-            />
+            <div>
+              {typeState.value === 'HealthCheck' && (
+                <SelectField
+                  label="Health rating"
+                  name="healthCheckRating"
+                  options={healthCheckOptions}
+                />
+              )}
+            </div>
+
+            <div>
+              {typeState.value === 'Hospital' && (
+                <>
+                  <Field
+                    label="Discharge date"
+                    name="discharge.date"
+                    placeholder="Discharge date"
+                    component={TextField}
+                  />
+                  <Field
+                    label="Discharge criteria"
+                    name="discharge.criteria"
+                    placeholder="Discharge criteria"
+                    component={TextField}
+                  />
+                </>
+              )}
+            </div>
+
             <Grid item>
               <Button
                 color="secondary"

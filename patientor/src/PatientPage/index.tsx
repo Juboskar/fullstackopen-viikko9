@@ -1,13 +1,14 @@
 import { useParams } from 'react-router-dom';
 import { addPatient, useStateValue } from '../state';
 import { apiBaseUrl } from '../constants';
-import { Patient } from '../types';
+import { Entry, Patient } from '../types';
 import axios from 'axios';
 import GenderIcon from '../components/GenderIcon';
 import React from 'react';
 import EntryList from './EntryList';
 import AddEntryModal from '../AddEntryModal';
 import { Button } from '@material-ui/core';
+import { AddEntryFormValues } from '../AddEntryModal/AddEntryForm';
 // import AddEntryForm from './AddEntryForm';
 
 const PatientPage = () => {
@@ -42,6 +43,28 @@ const PatientPage = () => {
 
   const patient = patients[id as string];
 
+  const submitNewEntry = async (values: AddEntryFormValues) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${patient.id}`,
+        values
+      );
+      const updatedPatient = {...patient, entries: patient.entries.concat(newEntry)};
+      dispatch(addPatient(updatedPatient));
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || 'Unrecognized axios error');
+        setError(
+          String(e?.response?.data) || 'Unrecognized axios error'
+        );
+      } else {
+        console.error('Unknown error', e);
+        setError('Unknown error');
+      }
+    }
+  };
+
   if (patients[id as string] === undefined) {
     return <div>patient not found</div>;
   }
@@ -56,7 +79,7 @@ const PatientPage = () => {
       <h3>entries</h3>
       <EntryList entries={patient.entries} />
       <AddEntryModal
-        onSubmit={() => console.log('submit')}
+        onSubmit={submitNewEntry}
         onClose={() => closeModal()}
         modalOpen={modalOpen}
         error={error}

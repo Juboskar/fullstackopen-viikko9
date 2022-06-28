@@ -23,6 +23,10 @@ export interface HealthCheckOption extends OptionBase {
   value: HealthCheckRating;
 }
 
+export interface TypeOption extends OptionBase {
+  value: 'Hospital' | 'OccupationalHealthcare' | 'HealthCheck';
+}
+
 type Option = GenderOption | HealthCheckOption;
 
 // props for select field component
@@ -48,6 +52,38 @@ export const SelectField = ({ name, label, options }: SelectFieldProps) => (
     >
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
+          {option.label || option.value}
+        </MenuItem>
+      ))}
+    </Field>
+  </>
+);
+
+type TypeFieldProps = {
+  name: string;
+  label: string;
+  options: TypeOption[];
+  action: (t: TypeOption) => void;
+};
+
+export const TypeField = ({ name, label, options, action }: TypeFieldProps) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <Field
+      fullWidth
+      style={{ marginBottom: '0.5em' }}
+      label={label}
+      component={FormikSelect}
+      name={name}
+    >
+      {options.map((option) => (
+        <MenuItem
+          key={option.value}
+          value={option.value}
+          onClick={() => {
+            action(option);
+          }}
+        >
           {option.label || option.value}
         </MenuItem>
       ))}
