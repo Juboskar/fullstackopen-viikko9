@@ -1,15 +1,27 @@
 import { Field, Form, Formik } from 'formik';
 import { Grid, Button } from '@material-ui/core';
-import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
+import {
+  DiagnosisSelection,
+  HealthCheckOption,
+  SelectField,
+  TextField,
+} from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
-import { Entry } from '../types';
+import { HealthCheckEntry } from '../types';
 
-export type AddEntryFormValues = Omit<Entry, 'id'>;
+export type AddEntryFormValues = Omit<HealthCheckEntry, 'id'>;
 
 interface Props {
   onSubmit: (values: AddEntryFormValues) => void;
   onCancel: () => void;
 }
+
+const healthCheckOptions: HealthCheckOption[] = [
+  { value: 0, label: 'Healthy' },
+  { value: 1, label: 'LowRisk' },
+  { value: 2, label: 'HighRisk' },
+  { value: 3, label: 'CriticalRisk' },
+];
 
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
@@ -17,10 +29,11 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   return (
     <Formik
       initialValues={{
-        type: 'Hospital',
+        type: 'HealthCheck',
         description: '',
         date: '',
         specialist: '',
+        healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -63,6 +76,11 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
               diagnoses={Object.values(diagnoses)}
+            />
+            <SelectField
+              label="Health rating"
+              name="healthCheckRating"
+              options={healthCheckOptions}
             />
             <Grid item>
               <Button
