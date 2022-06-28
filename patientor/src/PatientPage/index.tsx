@@ -9,7 +9,10 @@ import EntryList from './EntryList';
 import AddEntryModal from '../AddEntryModal';
 import { Button } from '@material-ui/core';
 import { AddEntryFormValues } from '../AddEntryModal/AddEntryForm';
-// import AddEntryForm from './AddEntryForm';
+
+const isDate = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
 
 const PatientPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -45,22 +48,48 @@ const PatientPage = () => {
 
   const submitNewEntry = async (values: AddEntryFormValues) => {
     try {
+      if (values.type === 'OccupationalHealthcare') {
+        if (
+          values.sickLeave?.startDate === '' &&
+          values.sickLeave?.endDate === ''
+        ) {
+          delete values.sickLeave;
+        } else {
+          if (
+            !values.sickLeave ||
+            !isDate(values.sickLeave.endDate) ||
+            !isDate(values.sickLeave.startDate)
+          ) {
+            throw new Error('Sickleave dates incorrect');
+          }
+        }
+      }
+
+      if (!isDate(values.date)) {
+        throw new Error('Missing or incorrect date');
+      }
+
+      if (values.type === 'Hospital' && !isDate(values.discharge.date)) {
+        throw new Error('Missing or incorrect discharge date');
+      }
+
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${patient.id}`,
         values
       );
-      const updatedPatient = {...patient, entries: patient.entries.concat(newEntry)};
+      const updatedPatient = {
+        ...patient,
+        entries: patient.entries.concat(newEntry),
+      };
       dispatch(addPatient(updatedPatient));
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         console.error(e?.response?.data || 'Unrecognized axios error');
-        setError(
-          String(e?.response?.data) || 'Unrecognized axios error'
-        );
+        setError(String(e?.response?.data) || 'Unrecognized axios error');
       } else {
         console.error('Unknown error', e);
-        setError('Unknown error');
+        setError(e as string);
       }
     }
   };

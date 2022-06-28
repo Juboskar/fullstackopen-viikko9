@@ -19,8 +19,8 @@ export type AddEntryFormValues = {
   specialist: string;
   healthCheckRating: HealthCheckRating;
   discharge: Discharge;
-  employerName: '';
-  sickLeave: SickLeave;
+  employerName: string;
+  sickLeave?: SickLeave;
 };
 
 interface Props {
@@ -62,7 +62,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         healthCheckRating: 0,
         discharge: { criteria: '', date: '' },
         employerName: '',
-        sickLeave: { startDate: '', endDate: '' },
+        sickLeave: { endDate: '', startDate: '' },
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -153,13 +153,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                   />
                   <Field
                     label="Sickleave start"
-                    name="sickLeave.start"
+                    name="sickLeave.startDate"
                     placeholder="Sickleave start"
                     component={TextField}
                   />
                   <Field
                     label="Sickleave end"
-                    name="sickLeave.end"
+                    name="sickLeave.endDate"
                     placeholder="Sickleave end"
                     component={TextField}
                   />
