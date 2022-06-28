@@ -162,6 +162,7 @@ export const toNewEntry = (entryfields: EntryFields): Entry => {
           entryfields.healthCheckRating
         ),
       };
+    default:
+      throw new Error('incorrect type');
   }
-  return newEntry as Entry;
 };
