@@ -9,7 +9,7 @@ import {
   TypeOption,
 } from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
-import { Discharge, HealthCheckRating } from '../types';
+import { Discharge, HealthCheckRating, SickLeave } from '../types';
 import { useState } from 'react';
 
 export type AddEntryFormValues = {
@@ -20,6 +20,7 @@ export type AddEntryFormValues = {
   healthCheckRating: HealthCheckRating;
   discharge: Discharge;
   employerName: '';
+  sickLeave: SickLeave;
 };
 
 interface Props {
@@ -61,6 +62,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         healthCheckRating: 0,
         discharge: { criteria: '', date: '' },
         employerName: '',
+        sickLeave: { startDate: '', endDate: '' },
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -134,6 +136,31 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                     label="Discharge criteria"
                     name="discharge.criteria"
                     placeholder="Discharge criteria"
+                    component={TextField}
+                  />
+                </>
+              )}
+            </div>
+
+            <div>
+              {typeState.value === 'OccupationalHealthcare' && (
+                <>
+                  <Field
+                    label="Employer"
+                    name="employerName"
+                    placeholder="Employer"
+                    component={TextField}
+                  />
+                  <Field
+                    label="Sickleave start"
+                    name="sickLeave.start"
+                    placeholder="Sickleave start"
+                    component={TextField}
+                  />
+                  <Field
+                    label="Sickleave end"
+                    name="sickLeave.end"
+                    placeholder="Sickleave end"
                     component={TextField}
                   />
                 </>
